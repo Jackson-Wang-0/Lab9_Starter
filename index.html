@@ -86,8 +86,12 @@
       <button>Trigger a Global Error</button>
     </section>
   </main>
-
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "b8582beeb3e74403ab4f3b14a7d11074"
+    // for more configuration options, see https://docs.trackjs.com
+    });
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,13 +99,121 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      try {
+        let result = eval(`${firstNum} ${operator} ${secondNum}`);
+        if (isNaN(result)) {
+          throw new CalculationError("Invalid calculation result");
+        }
+        output.innerHTML = result;
+      } catch (error) {
+        if (error instanceof CalculationError) {
+          output.innerHTML = `Calculation Error: ${error.message}`;
+        } else {
+          output.innerHTML = `Error: ${error.message}`;
+        }
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+
+    // Console Log Demo
+    errorBtns[0].addEventListener('click', () => {
+      let data = "This is a console log message";
+      console.log(data);
+    });
+
+    // Console Error Demo
+    errorBtns[1].addEventListener('click', () => {
+      let errorData = "This is a console error message";
+      console.error(errorData);
+    });
+
+    // Console Count Demo
+    errorBtns[2].addEventListener('click', () => {
+      console.count("Count");
+    });
+
+    // Console Warn Demo
+    errorBtns[3].addEventListener('click', () => {
+      let warning = "This is a warning message";
+      console.warn(warning);
+    });
+
+    // Console Assert Demo
+    errorBtns[4].addEventListener('click', () => {
+      let condition = false;
+      console.assert(condition, "Assertion failed: Condition is false");
+    });
+
+    // Console Clear Demo
+    errorBtns[5].addEventListener('click', () => {
+      console.clear();
+    });
+
+    // Console Dir Demo
+    errorBtns[6].addEventListener('click', () => {
+      let obj = { name: "John", age: 30, city: "New York" };
+      console.dir(obj);
+    });
+
+    // Console Dirxml Demo
+    errorBtns[7].addEventListener('click', () => {
+      let xmlString = "<book><title>Harry Potter</title></book>";
+      console.dirxml(xmlString);
+    });
+
+    // Console Group Start Demo
+    errorBtns[8].addEventListener('click', () => {
+      console.group("Group");
+      console.log("Inside Group");
+    });
+
+    // Console Group End Demo
+    errorBtns[9].addEventListener('click', () => {
+      console.log("Outside Group");
+      console.groupEnd();
+    });
+
+    // Console Table Demo
+    errorBtns[10].addEventListener('click', () => {
+      let tableData = [
+        { name: "John", age: 30, city: "New York" },
+        { name: "Jane", age: 25, city: "Paris" },
+        { name: "Bob", age: 40, city: "London" }
+      ];
+      console.table(tableData);
+    });
+
+    // Console Time Start Demo
+    errorBtns[11].addEventListener('click', () => {
+      console.time("Timer");
+    });
+
+    // Console Time End Demo
+    errorBtns[12].addEventListener('click', () => {
+      console.timeEnd("Timer");
+    });
+
+    // Console Trace Demo
+    errorBtns[13].addEventListener('click', () => {
+      function foo() {
+        function bar() {
+          console.trace();
+        }
+        bar();
+      }
+      foo();
+    });
+
+    // Trigger a Global Error Demo
+    errorBtns[14].addEventListener('click', () => {
+      throw new Error("This is a global error");
+    });
+
   </script>
 </body>
 
